@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.AutoWebApi", "src\NET.AutoWebApi\NET.AutoWebApi.csproj", "{F61349C4-88E6-4E65-A9D8-7467456E821B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{12A45842-29AE-4313-AA43-094CD282F49F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{064816A1-AE37-4727-817E-23AE0563A029}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{971AC614-6BB6-4C46-860C-DCA57F6CCB37}"
+	ProjectSection(SolutionItems) = preProject
+		common.props = common.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.AutoWebApi.Test", "NET.AutoWebApi.Test\NET.AutoWebApi.Test.csproj", "{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F61349C4-88E6-4E65-A9D8-7467456E821B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F61349C4-88E6-4E65-A9D8-7467456E821B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F61349C4-88E6-4E65-A9D8-7467456E821B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F61349C4-88E6-4E65-A9D8-7467456E821B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F61349C4-88E6-4E65-A9D8-7467456E821B} = {12A45842-29AE-4313-AA43-094CD282F49F}
+		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3} = {064816A1-AE37-4727-817E-23AE0563A029}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55C85DF1-9BA4-4D3F-B26C-6D7EF032F054}
+	EndGlobalSection
+EndGlobal
