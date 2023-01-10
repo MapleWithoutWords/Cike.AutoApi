@@ -1,7 +1,7 @@
 # AutoWebApi
 
 #### 介绍
-🔥无需创建Controller，直接通过restful规范讲业务层动态生成进控制器🔥
+🔥无需创建Controller，根据restful规范 将业务层 动态生成控制器🔥
 
 #### 软件架构
 软件架构说明
