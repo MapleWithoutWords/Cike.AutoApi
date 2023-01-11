@@ -31,7 +31,11 @@ namespace NET.AutoWebApi
                 .GetRequiredService<IOptions<AutoApiConventionalControllerOptions>>().Value
                 .GetConventionalControllerSettingOrNull(typeInfo.AsType());
 
-            return configuration != null;
+            if (configuration == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

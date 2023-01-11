@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.AutoWebApi", "src\NET.AutoWebApi\NET.AutoWebApi.csproj", "{F61349C4-88E6-4E65-A9D8-7467456E821B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET.AutoWebApi", "src\NET.AutoWebApi\NET.AutoWebApi.csproj", "{F61349C4-88E6-4E65-A9D8-7467456E821B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{12A45842-29AE-4313-AA43-094CD282F49F}"
 EndProject
@@ -14,7 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution 
 		common.props = common.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.AutoWebApi.Test", "NET.AutoWebApi.Test\NET.AutoWebApi.Test.csproj", "{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.AutoWebApi.Test", "tests\NET.AutoWebApi.Test\NET.AutoWebApi.Test.csproj", "{ED777777-FDD2-406A-B95D-6D3F632C0881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.Service.Test", "NET.Service.Test\NET.Service.Test.csproj", "{562A7D0E-EFC1-4FFB-92A8-8B836B92BF32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET.AutoApi", "NET.AutoApi\NET.AutoApi.csproj", "{A6FA40A2-0923-407D-B799-3D137EA117CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,17 +30,27 @@ Global
 		{F61349C4-88E6-4E65-A9D8-7467456E821B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F61349C4-88E6-4E65-A9D8-7467456E821B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F61349C4-88E6-4E65-A9D8-7467456E821B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED777777-FDD2-406A-B95D-6D3F632C0881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED777777-FDD2-406A-B95D-6D3F632C0881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED777777-FDD2-406A-B95D-6D3F632C0881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED777777-FDD2-406A-B95D-6D3F632C0881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{562A7D0E-EFC1-4FFB-92A8-8B836B92BF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{562A7D0E-EFC1-4FFB-92A8-8B836B92BF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{562A7D0E-EFC1-4FFB-92A8-8B836B92BF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{562A7D0E-EFC1-4FFB-92A8-8B836B92BF32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6FA40A2-0923-407D-B799-3D137EA117CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6FA40A2-0923-407D-B799-3D137EA117CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6FA40A2-0923-407D-B799-3D137EA117CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6FA40A2-0923-407D-B799-3D137EA117CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F61349C4-88E6-4E65-A9D8-7467456E821B} = {12A45842-29AE-4313-AA43-094CD282F49F}
-		{AFF2B2D7-2632-48CE-AB9C-63B1317DEDC3} = {064816A1-AE37-4727-817E-23AE0563A029}
+		{ED777777-FDD2-406A-B95D-6D3F632C0881} = {064816A1-AE37-4727-817E-23AE0563A029}
+		{562A7D0E-EFC1-4FFB-92A8-8B836B92BF32} = {064816A1-AE37-4727-817E-23AE0563A029}
+		{A6FA40A2-0923-407D-B799-3D137EA117CA} = {12A45842-29AE-4313-AA43-094CD282F49F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {55C85DF1-9BA4-4D3F-B26C-6D7EF032F054}
