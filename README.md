@@ -39,7 +39,7 @@ public class UserController:ControllerBase
 #### 安装教程
 
 ```shell
-dotnet add package NET.AutoApi --version 1.0.1
+dotnet add package NET.AutoApi
 ```
 
 #### 使用说明
