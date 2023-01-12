@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using NET.AutoApi;
 using NET.AutoWebApi;
 using NET.AutoWebApi.Options;
 using System;
@@ -17,13 +18,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IServiceCollectionExtensions
     {
-        public static void AddAutoApiService(this IServiceCollection services, Action<MvcOptions> mvcOptionAction = null, Action<AutoApiConventionalControllerOptions> optionAction = null)
+        public static void AddAutoApiService(this IServiceCollection services, Action<AutoApiConventionalControllerOptions> optionAction = null, Action<MvcOptions> mvcOptionAction = null)
         {
-            services.Configure<MvcOptions>(opt =>
-            {
-                opt.Conventions.Add(new AutoApiServiceConventionWrapper(services));
-                mvcOptionAction?.Invoke(opt);
-            });
+
             services.Configure<AutoApiConventionalControllerOptions>(opt =>
             {
                 optionAction?.Invoke(opt);
@@ -31,16 +28,22 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<IConventionalRouteBuilder, ConventionalRouteBuilder>();
             services.AddTransient<IAutoApiServiceConvention, AutoApiServiceConvention>();
+
+            services.Configure<MvcOptions>(opt =>
+            {
+                opt.Conventions.Add(new AutoApiServiceConventionWrapper());
+                mvcOptionAction?.Invoke(opt);
+            });
         }
 
 
-        public static void UseAutoApiService(this IHost host, params Assembly[] assemblies)
+        public static void UseAutoApiService(this IHost host)
         {
-            var partManager = host.Services.GetService<ApplicationPartManager>();
-            partManager.FeatureProviders.Add(new AutoApiConventionalControllerFeatureProvider(host));
-            var conventionalOptions = host.Services.GetService<IOptions<AutoApiConventionalControllerOptions>>();
+            ServiceProviderManager.ServiceProvider = host.Services;
+            var partManager = host.Services.GetRequiredService<ApplicationPartManager>();
+            partManager.FeatureProviders.Add(new AutoApiConventionalControllerFeatureProvider(host.Services));
 
-
+            var conventionalOptions = host.Services.GetRequiredService<IOptions<AutoApiConventionalControllerOptions>>();
             foreach (var moduleAssembly in conventionalOptions.Value.ConventionalControllerSettings)
             {
                 partManager.ApplicationParts.AddIfNotContains(moduleAssembly.Assembly);

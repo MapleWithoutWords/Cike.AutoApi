@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using NET.AutoApi;
 using NET.AutoWebApi.Options;
 using System;
 using System.Collections.Generic;
@@ -13,21 +14,17 @@ namespace NET.AutoWebApi
 {
     public class AutoApiConventionalControllerFeatureProvider : ControllerFeatureProvider
     {
-        private readonly IHost _host;
+        private readonly IServiceProvider _serviceProvider;
 
-        public AutoApiConventionalControllerFeatureProvider(IHost host)
+        public AutoApiConventionalControllerFeatureProvider(IServiceProvider serviceProvider)
         {
-            _host = host;
+            _serviceProvider = serviceProvider;
         }
 
         protected override bool IsController(TypeInfo typeInfo)
         {
-            if (_host.Services == null)
-            {
-                return false;
-            }
 
-            var configuration = _host.Services
+            var configuration = _serviceProvider
                 .GetRequiredService<IOptions<AutoApiConventionalControllerOptions>>().Value
                 .GetConventionalControllerSettingOrNull(typeInfo.AsType());
 

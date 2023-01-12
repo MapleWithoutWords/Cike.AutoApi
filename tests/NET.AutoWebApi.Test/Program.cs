@@ -1,14 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.OpenApi.Models;
 using NET.Service.Test;
+using NET.Service.Test.TestService;
+using NET.Service.Test.TestService.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddAutoApiService(optionAction: opt =>
 {
     opt.CreateConventional(typeof(NETServiceTest).Assembly);
 });
+
+builder.Services.AddTransient<ITestService, TestService>();
+builder.Services.AddTransient<TestService>();
+
+builder.Services.AddControllers().AddControllersAsServices();
 
 
 
@@ -26,22 +36,24 @@ builder.Services.AddSwaggerGen(c =>
     {
         c.IncludeXmlComments(item, true);
     }
-
+    c.DocInclusionPredicate((docName,action)=>true);
 });
-
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
 app.UseAutoApiService();
+
+
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test"));
 // Configure the HTTP request pipeline.
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseSwagger();
-
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test"));
+var endpointRouteBuilder = app.Services.GetRequiredService<IActionDescriptorCollectionProvider>();
 
 app.Run();

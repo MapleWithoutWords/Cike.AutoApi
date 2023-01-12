@@ -10,7 +10,6 @@ namespace NET.Service.Test.TestService.Impl
 {
     public class TestService : ITestService
     {
-        [AutoApi]
         public async Task<List<string>> CreateAsync(TestCreateUpdateInput input)
         {
             return new List<string>
@@ -19,7 +18,6 @@ namespace NET.Service.Test.TestService.Impl
             };
         }
 
-        [AutoApi]
         public async Task<string> GetListAsync(string keyword)
         {
             return keyword;

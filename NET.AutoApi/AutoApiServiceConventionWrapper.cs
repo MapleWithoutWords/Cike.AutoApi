@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection;
+using NET.AutoApi;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +11,9 @@ namespace NET.AutoWebApi
     {
         private readonly IAutoApiServiceConvention _convention;
 
-        public AutoApiServiceConventionWrapper(IServiceCollection services)
+        public AutoApiServiceConventionWrapper()//IServiceProvider serviceProvider)
         {
-            _convention = services.BuildServiceProvider().GetRequiredService<IAutoApiServiceConvention>();
+            _convention = ServiceProviderManager.ServiceProvider.GetRequiredService<IAutoApiServiceConvention>();
         }
 
         public void Apply(ApplicationModel application)
