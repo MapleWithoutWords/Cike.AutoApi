@@ -18,7 +18,7 @@ builder.Services.AddAutoApiService(opt =>
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<TestService>();
 
-builder.Services.AddControllers().AddControllersAsServices();
+builder.Services.AddControllers();
 
 
 
