@@ -43,17 +43,50 @@ dotnet add package NET.AutoApi --version 1.0.1
 ```
 
 #### 使用说明
-1. 在 ```Program.cs``` 中添加以下两段代码
+* 在 ```Program.cs``` 中添加以下两段代码
 ```c#
 
 builder.Services.AddAutoApiService(opt =>
 {
+    //NETServiceTest所在程序集添加进动态api配置
     opt.CreateConventional(typeof(NETServiceTest).Assembly);
 });
 
-//这段要放在 app.MapControllers(); 前面
+//放在 app.MapControllers(); 前面
 app.UseAutoApiService();
 ```
+
+2. 业务层代码，只需要继承 ```IAutoApiService``` 接口就行
+
+```c#
+    public class TestService : IAutoApiService
+    {
+        public async Task<List<string>> CreateAsync(TestCreateUpdateInput input)
+        {
+            return new List<string>
+            {
+                $"{input.Code}|{input.Name}"
+            };
+        }
+
+        public async Task<string> GetListAsync(string keyword)
+        {
+            return keyword;
+        }
+
+        public async Task<List<string>> UpdateAsync(Guid id, TestCreateUpdateInput input)
+        {
+            return new List<string>
+            {
+                $"{id}|{input.Code}|{input.Name}"
+            };
+        }
+    }
+```
+
+3. 最终效果
+
+![运行效果图](./doc/%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C%E5%9B%BE.png)
 
 #### 使用本项目的框架
 
