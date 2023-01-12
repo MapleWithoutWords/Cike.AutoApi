@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\NET.Service.Test\NET.Service.Test.csproj" />
+		<ProjectReference Include="..\NET.Service.Test\NET.Service.Test.csproj" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
 	</ItemGroup>
 

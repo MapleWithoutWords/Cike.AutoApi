@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-builder.Services.AddAutoApiService(optionAction: opt =>
+builder.Services.AddAutoApiService(opt =>
 {
     opt.CreateConventional(typeof(NETServiceTest).Assembly);
 });

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NET.AutoApi\NET.AutoApi.csproj" />
+    <ProjectReference Include="..\..\src\NET.AutoApi\NET.AutoApi.csproj" />
   </ItemGroup>
 
 </Project>
