@@ -7,6 +7,7 @@ namespace NET.AutoWebApi.Consts
     public static class AutoApiConsts
     {
         public const string DefaultRootPath = "app";
+        public const string DefaultApiPrefix = "api";
 
     }
 }

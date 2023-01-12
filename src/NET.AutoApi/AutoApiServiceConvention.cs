@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using NET.AutoWebApi.Consts;
+using NET.AutoWebApi.Helper;
 using NET.AutoWebApi.Options;
 using NET.AutoWebApi.Setting;
 using System;
@@ -12,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using static System.Collections.Specialized.BitVector32;
 
 namespace NET.AutoWebApi
 {
@@ -20,23 +23,20 @@ namespace NET.AutoWebApi
         public ILogger<AutoApiServiceConvention> Logger { get; set; }
 
         protected AutoApiConventionalControllerOptions Options { get; }
+        protected IConventionalRouteBuilder ConventionalRouteBuilder { get; }
 
         public AutoApiServiceConvention(
-            IOptions<AutoApiConventionalControllerOptions> options)
+            IOptions<AutoApiConventionalControllerOptions> options, IConventionalRouteBuilder conventionalRouteBuilder)
         {
             Options = options.Value;
 
             Logger = NullLogger<AutoApiServiceConvention>.Instance;
+            ConventionalRouteBuilder = conventionalRouteBuilder;
         }
 
 
 
         public void Apply(ApplicationModel application)
-        {
-            ApplyForControllers(application);
-        }
-
-        protected virtual void ApplyForControllers(ApplicationModel application)
         {
             RemoveDuplicateControllers(application);
 
@@ -44,34 +44,27 @@ namespace NET.AutoWebApi
             {
                 var controllerType = controller.ControllerType.AsType();
 
+                //拿到自动api的配置
                 var configuration = GetControllerSettingOrNull(controllerType);
 
 
-                if (ImplementsRemoteServiceInterface(controllerType))
+                if (ImplementsAutoApiServiceInterface(controllerType))
                 {
-                    foreach (var item in Options.RemoveServiceNameFix)
-                    {
-                        controller.ControllerName = controller.ControllerName.Replace(item, "");
-                    }
+                    controller.ControllerName = controller.ControllerName.RemovePostFix(Options.RemoveServiceNameFix.ToArray());
                     configuration?.ControllerModelConfigurer?.Invoke(controller);
-                    ConfigureRemoteService(controller, configuration);
+                    ConfigureAutoApiService(controller, configuration);
                 }
                 else
                 {
-                    var controllerTypeInfo = controllerType.GetTypeInfo();
-
-                    if (controllerTypeInfo.IsDefined(typeof(AutoApiAttribute), true)==false)
-                    {
-                        continue;
-                    }
-                    var remoteServiceAttr = controllerTypeInfo.GetCustomAttributes(typeof(AutoApiAttribute), true).Cast<AutoApiAttribute>().First();
+                    var remoteServiceAttr = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(controllerType.GetTypeInfo());
                     if (remoteServiceAttr != null && remoteServiceAttr.IsEnabled)
                     {
-                        ConfigureRemoteService(controller, configuration);
+                        ConfigureAutoApiService(controller, configuration);
                     }
                 }
             }
         }
+
 
 
         protected virtual IList<ControllerModel> GetControllers(ApplicationModel application)
@@ -79,6 +72,10 @@ namespace NET.AutoWebApi
             return application.Controllers;
         }
 
+        /// <summary>
+        /// 删除重复的控制器
+        /// </summary>
+        /// <param name="application"></param>
         protected virtual void RemoveDuplicateControllers(ApplicationModel application)
         {
             var removeControllerModelList = new List<ControllerModel>();
@@ -134,7 +131,7 @@ namespace NET.AutoWebApi
             }
         }
 
-        protected virtual void ConfigureRemoteService(ControllerModel controller, AutoApiConventionalControllerSetting configuration)
+        protected virtual void ConfigureAutoApiService(ControllerModel controller, AutoApiConventionalControllerSetting configuration)
         {
             ConfigureApiExplorer(controller);
             ConfigureSelector(controller, configuration);
@@ -209,6 +206,10 @@ namespace NET.AutoWebApi
             return true;
         }
 
+        /// <summary>
+        /// 配置控制器
+        /// </summary>
+        /// <param name="controller"></param>
         protected virtual void ConfigureApiExplorer(ControllerModel controller)
         {
             if (controller.ApiExplorer.GroupName.IsNullOrEmpty())
@@ -218,23 +219,27 @@ namespace NET.AutoWebApi
 
             if (controller.ApiExplorer.IsVisible == null)
             {
-                controller.ApiExplorer.IsVisible = IsVisibleRemoteService(controller.ControllerType);
+                controller.ApiExplorer.IsVisible = IsVisibleAutoApiService(controller.ControllerType);
             }
 
             foreach (var action in controller.Actions)
             {
-                ConfigureApiExplorer(action);
+                ConfigureApiActionExplorer(action);
             }
         }
 
-        protected virtual void ConfigureApiExplorer(ActionModel action)
+        /// <summary>
+        /// 配置Action
+        /// </summary>
+        /// <param name="action"></param>
+        protected virtual void ConfigureApiActionExplorer(ActionModel action)
         {
             if (action.ApiExplorer.IsVisible != null)
             {
                 return;
             }
 
-            var visible = IsVisibleRemoteServiceMethod(action.ActionMethod);
+            var visible = IsVisibleAutoApiServiceMethod(action.ActionMethod);
             if (visible == null)
             {
                 return;
@@ -245,20 +250,23 @@ namespace NET.AutoWebApi
 
         protected virtual void ConfigureSelector(ControllerModel controller, AutoApiConventionalControllerSetting configuration)
         {
+            //删除空的路由选择器
             RemoveEmptySelectors(controller.Selectors);
 
             var controllerType = controller.ControllerType.AsType();
-            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(controllerType.GetTypeInfo());
-            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(controllerType))
+            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(controllerType.GetTypeInfo()); 
+            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabled)
             {
                 return;
             }
 
+            //如果已经配置了路由信息，则不配置
             if (controller.Selectors.Any(selector => selector.AttributeRouteModel != null))
             {
                 return;
             }
 
+            //获取跟路由
             var rootPath = GetRootPathOrDefault(controller.ControllerType.AsType());
 
             foreach (var action in controller.Actions)
@@ -267,33 +275,48 @@ namespace NET.AutoWebApi
             }
         }
 
+        /// <summary>
+        /// 配置每个action的路由信息
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="action"></param>
+        /// <param name="configuration"></param>
         protected virtual void ConfigureSelector(string rootPath, string controllerName, ActionModel action, AutoApiConventionalControllerSetting configuration)
         {
+            //删除空的路由选择器
             RemoveEmptySelectors(action.Selectors);
 
             var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(action.ActionMethod);
-            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(action.ActionMethod))
+            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabled)
             {
                 return;
             }
 
             if (!action.Selectors.Any())
             {
-                AddAbpServiceSelector(rootPath, controllerName, action, configuration);
+                AddAutoApiServiceSelector(rootPath, controllerName, action, configuration);
             }
             else
             {
                 NormalizeSelectorRoutes(rootPath, controllerName, action, configuration);
             }
         }
-
-        protected virtual void AddAbpServiceSelector(string rootPath, string controllerName, ActionModel action, [CanBeNull] AutoApiConventionalControllerSetting configuration)
+        /// <summary>
+        /// 添加自动api配置路由选择器
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="action"></param>
+        /// <param name="configuration"></param>
+        protected virtual void AddAutoApiServiceSelector(string rootPath, string controllerName, ActionModel action, AutoApiConventionalControllerSetting configuration)
         {
+            //获取http方法
             var httpMethod = SelectHttpMethod(action, configuration);
 
             var abpServiceSelectorModel = new SelectorModel
             {
-                AttributeRouteModel = CreateAbpServiceAttributeRouteModel(rootPath, controllerName, action, httpMethod, configuration),
+                AttributeRouteModel = CreateAutoApiServiceAttributeRouteModel(rootPath, controllerName, action, httpMethod, configuration),
                 ActionConstraints = { new HttpMethodActionConstraint(new[] { httpMethod }) }
             };
 
@@ -305,7 +328,14 @@ namespace NET.AutoWebApi
             return HttpMethodHelper.GetConventionalVerbForMethodName(action.ActionName);
         }
 
-        protected virtual void NormalizeSelectorRoutes(string rootPath, string controllerName, ActionModel action, [CanBeNull] AutoApiConventionalControllerSetting configuration)
+        /// <summary>
+        /// 配置空的路由选择器为自动api的路由配置
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="action"></param>
+        /// <param name="configuration"></param>
+        protected virtual void NormalizeSelectorRoutes(string rootPath, string controllerName, ActionModel action, AutoApiConventionalControllerSetting configuration)
         {
             foreach (var selector in action.Selectors)
             {
@@ -322,7 +352,7 @@ namespace NET.AutoWebApi
 
                 if (selector.AttributeRouteModel == null)
                 {
-                    selector.AttributeRouteModel = CreateAbpServiceAttributeRouteModel(rootPath, controllerName, action, httpMethod, configuration);
+                    selector.AttributeRouteModel = CreateAutoApiServiceAttributeRouteModel(rootPath, controllerName, action, httpMethod, configuration);
                 }
 
                 if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
@@ -332,6 +362,11 @@ namespace NET.AutoWebApi
             }
         }
 
+        /// <summary>
+        /// 获取路由根路径或默认根路径
+        /// </summary>
+        /// <param name="controllerType"></param>
+        /// <returns></returns>
         protected virtual string GetRootPathOrDefault(Type controllerType)
         {
             var controllerSetting = GetControllerSettingOrNull(controllerType);
@@ -346,16 +381,25 @@ namespace NET.AutoWebApi
                 return areaAttribute.RouteValue;
             }
 
-            return ModuleApiDescriptionModel.DefaultRootPath;
+            return AutoApiConsts.DefaultRootPath;
         }
 
 
         protected virtual AutoApiConventionalControllerSetting GetControllerSettingOrNull(Type controllerType)
         {
-            return Options.ConventionalControllerSettings.GetSettingOrNull(controllerType);
+            return Options.GetConventionalControllerSettingOrNull(controllerType);
         }
 
-        protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, AutoApiConventionalControllerSetting configuration)
+        /// <summary>
+        /// 创建路由信息
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="action"></param>
+        /// <param name="httpMethod"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        protected virtual AttributeRouteModel CreateAutoApiServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, AutoApiConventionalControllerSetting configuration)
         {
             return new AttributeRouteModel(
                 new RouteAttribute(
@@ -379,12 +423,17 @@ namespace NET.AutoWebApi
                    && selector.EndpointMetadata.IsNullOrEmpty();
         }
 
-        protected virtual bool ImplementsRemoteServiceInterface(Type controllerType)
+        /// <summary>
+        /// 类型是否继承了 IAutoApiService 接口
+        /// </summary>
+        /// <param name="controllerType"></param>
+        /// <returns></returns>
+        protected virtual bool ImplementsAutoApiServiceInterface(Type controllerType)
         {
             return typeof(IAutoApiService).GetTypeInfo().IsAssignableFrom(controllerType);
         }
 
-        protected virtual bool IsVisibleRemoteService(Type controllerType)
+        protected virtual bool IsVisibleAutoApiService(Type controllerType)
         {
 
             var attribute = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(controllerType);
@@ -393,20 +442,24 @@ namespace NET.AutoWebApi
                 return true;
             }
 
-            return attribute.IsEnabledFor(controllerType) &&
-                   attribute.IsMetadataEnabledFor(controllerType);
+            return attribute.IsEnabled;
         }
 
-        protected virtual bool? IsVisibleRemoteServiceMethod(MethodInfo method)
+        /// <summary>
+        /// 是否显示自动api方法
+        /// </summary>
+        /// <param name="method"></param>
+        /// <returns></returns>
+        protected virtual bool? IsVisibleAutoApiServiceMethod(MethodInfo method)
         {
+            
             var attribute = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(method);
             if (attribute == null)
             {
                 return null;
             }
 
-            return attribute.IsEnabledFor(method) &&
-                   attribute.IsMetadataEnabledFor(method);
+            return attribute.IsEnabled;
         }
 
     }

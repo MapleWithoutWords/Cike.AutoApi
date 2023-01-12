@@ -9,6 +9,9 @@ using System.Text;
 
 namespace NET.AutoWebApi.Options
 {
+    /// <summary>
+    /// 自动api转换为控制器配置
+    /// </summary>
     public class AutoApiConventionalControllerSetting
     {
         public Assembly Assembly { get; }

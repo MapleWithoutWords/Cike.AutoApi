@@ -3,6 +3,7 @@ using NET.AutoWebApi.Consts;
 using NET.AutoWebApi.ModelBinding;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace NET.AutoWebApi.Options
@@ -13,6 +14,16 @@ namespace NET.AutoWebApi.Options
         /// 控制器转换配置
         /// </summary>
         public List<AutoApiConventionalControllerSetting> ConventionalControllerSettings { get; }
+
+        /// <summary>
+        /// 获取包含该类型的转换配置
+        /// </summary>
+        /// <param name="controllerType"></param>
+        /// <returns></returns>
+        public AutoApiConventionalControllerSetting GetConventionalControllerSettingOrNull(Type controllerType)
+        {
+            return this.ConventionalControllerSettings.FirstOrDefault(controllerSetting => controllerSetting.ControllerTypes.Contains(controllerType));
+        }
 
         /// <summary>
         /// 请求报文体模型绑定忽略类型
