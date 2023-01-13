@@ -82,6 +82,19 @@ app.UseAutoApiService();
                 $"{id}|{input.Code}|{input.Name}"
             };
         }
+        
+        /// <summary>
+        /// Upload file. If you upload files,Please use IAutoApiStreamContent[] .
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public async Task<string> ImportAsync(IAutoApiStreamContent file)
+        {
+            using var fileStream = file.GetStream();
+
+
+            return file.FileName;
+        }
     }
 ```
 
@@ -89,7 +102,6 @@ app.UseAutoApiService();
 3. Final effect
 
 ![Final effect](./doc/%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C%E5%9B%BEen.png)
-
 
 
 

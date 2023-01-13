@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NET.AutoWebApi.ModelBinding
 {
-    public interface IAutoApiStreamContent
+    public interface IAutoApiStreamContent : IDisposable
     {
         string FileName { get; }
 

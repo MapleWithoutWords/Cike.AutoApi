@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NET.AutoApi;
+using NET.AutoApi.ModelBinding;
 using NET.AutoWebApi;
 using NET.AutoWebApi.Options;
 using System;
@@ -32,6 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<MvcOptions>(opt =>
             {
                 opt.Conventions.Add(new AutoApiServiceConventionWrapper());
+                opt.ModelBinderProviders.Add(new AutoApiStreamContentModelBinderProvider());
                 mvcOptionAction?.Invoke(opt);
             });
         }

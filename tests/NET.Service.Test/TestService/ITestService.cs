@@ -1,4 +1,5 @@
-﻿using NET.AutoWebApi.Setting;
+﻿using NET.AutoWebApi.ModelBinding;
+using NET.AutoWebApi.Setting;
 using NET.Service.Test.TestService.Dtos;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,7 @@ namespace NET.Service.Test.TestService
 
         public Task<List<string>> CreateAsync(TestCreateUpdateInput input);
         public Task<List<string>> UpdateAsync(Guid id, TestCreateUpdateInput input);
+
+        public Task<string> ImportAsync(IAutoApiStreamContent file);
     }
 }
