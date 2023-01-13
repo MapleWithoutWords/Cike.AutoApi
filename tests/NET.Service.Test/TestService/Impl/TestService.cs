@@ -1,4 +1,5 @@
-﻿using NET.AutoWebApi.Setting;
+﻿using NET.AutoWebApi.ModelBinding;
+using NET.AutoWebApi.Setting;
 using NET.Service.Test.TestService.Dtos;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,14 @@ namespace NET.Service.Test.TestService.Impl
             {
                 $"{id}|{input.Code}|{input.Name}"
             };
+        }
+
+        public async Task<string> ImportAsync(IAutoApiStreamContent file)
+        {
+            using var fileStream = file.GetStream();
+
+
+            return file.FileName;
         }
     }
 }
