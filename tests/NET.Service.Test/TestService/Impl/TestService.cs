@@ -32,6 +32,11 @@ namespace NET.Service.Test.TestService.Impl
             };
         }
 
+        /// <summary>
+        /// 文件流使用
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         public async Task<string> ImportAsync(IAutoApiStreamContent file)
         {
             using var fileStream = file.GetStream();

@@ -81,6 +81,19 @@ app.UseAutoApiService();
                 $"{id}|{input.Code}|{input.Name}"
             };
         }
+        
+        /// <summary>
+        /// 文件流使用，上传的时候正常传到报文体内就行了
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public async Task<string> ImportAsync(IAutoApiStreamContent file)
+        {
+            using var fileStream = file.GetStream();
+
+
+            return file.FileName;
+        }
     }
 ```
 
@@ -91,5 +104,4 @@ app.UseAutoApiService();
 #### 使用本项目的框架
 
 1. [Yi.Framework](https://gitee.com/ccnetcore/Yi)
-
 
