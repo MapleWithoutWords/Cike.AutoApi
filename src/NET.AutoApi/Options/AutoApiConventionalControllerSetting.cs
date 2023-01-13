@@ -16,7 +16,7 @@ namespace NET.AutoWebApi.Options
     {
         public Assembly Assembly { get; }
 
-        public HashSet<Type> ControllerTypes { get; } //TODO: Internal?
+        public HashSet<Type> ControllerTypes { get; }
 
         public string RootPath { get; set; }
 

@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAutoApiService(opt =>
 {
-    opt.CreateConventional(typeof(NETServiceTest).Assembly);
+    opt.CreateConventional(typeof(NETServiceTest).Assembly,opt=>opt.RootPath="");
 });
 
 builder.Services.AddTransient<ITestService, TestService>();

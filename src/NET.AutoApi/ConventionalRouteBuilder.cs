@@ -37,7 +37,7 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder
         var apiRoutePrefix = AutoApiConsts.DefaultApiPrefix;
         var controllerNameInUrl = controllerName;
 
-        var url = $"{apiRoutePrefix}/{rootPath}/{controllerName.ToKebabCase()}";
+        var url = $"{apiRoutePrefix}/{rootPath}/{controllerName.ToKebabCase()}".Replace("//","/");
 
         var idParameterModel = action.Parameters.FirstOrDefault(p => p.ParameterName == "id");
         if (idParameterModel != null)
