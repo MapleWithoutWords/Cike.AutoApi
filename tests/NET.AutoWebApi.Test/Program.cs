@@ -10,16 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-builder.Services.AddAutoApiService(opt =>
-{
-    opt.CreateConventional(typeof(NETServiceTest).Assembly,opt=>opt.RootPath="");
-});
 
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<TestService>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddAutoApiService(opt =>
+{
+    opt.CreateConventional(typeof(NETServiceTest).Assembly, opt => opt.RootPath = "");
+});
 
 
 var apiInfo = new OpenApiInfo
@@ -40,8 +40,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
-
-app.UseAutoApiService();
 
 
 

@@ -45,16 +45,14 @@ dotnet add package NET.AutoApi
 #### Instructions
 
 1. Add the following two pieces of code in ```Program.cs```
-```c#
 
+```c#
+//The 'AddAutoApiService' method must be placed after the 'AddControllers' or 'AddMvc' method.
 builder.Services.AddAutoApiService(opt =>
 {
     //Add dynamic api configuration to the assembly where NETServiceTest resides
     opt.CreateConventional(typeof(NETServiceTest).Assembly);
 });
-
-// Put it in app.MapControllers(); In front
-app.UseAutoApiService();
 ```
 
 2. Business layer code, just need to inherit ```IAutoApiService``` interface
