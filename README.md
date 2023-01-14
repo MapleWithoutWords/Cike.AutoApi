@@ -43,17 +43,17 @@ dotnet add package NET.AutoApi
 ```
 
 #### 使用说明
-* 在 ```Program.cs``` 中添加以下两段代码
-```c#
 
+* 在 ```Program.cs``` 中添加以下两段代码
+
+```c#
+//放在AddController或者AddMvc后面
 builder.Services.AddAutoApiService(opt =>
 {
     //NETServiceTest所在程序集添加进动态api配置
     opt.CreateConventional(typeof(NETServiceTest).Assembly);
 });
 
-//放在 app.MapControllers(); 前面
-app.UseAutoApiService();
 ```
 
 2. 业务层代码，只需要继承 ```IAutoApiService``` 接口就行

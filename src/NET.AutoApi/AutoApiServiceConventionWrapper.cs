@@ -11,9 +11,9 @@ namespace NET.AutoWebApi
     {
         private readonly IAutoApiServiceConvention _convention;
 
-        public AutoApiServiceConventionWrapper()//IServiceProvider serviceProvider)
+        public AutoApiServiceConventionWrapper(IServiceProvider serviceProvider)
         {
-            _convention = ServiceProviderManager.ServiceProvider.GetRequiredService<IAutoApiServiceConvention>();
+            _convention = serviceProvider.GetRequiredService<IAutoApiServiceConvention>();
         }
 
         public void Apply(ApplicationModel application)
