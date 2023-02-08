@@ -1,13 +1,13 @@
 <Project>
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<Authors>James li</Authors>
 		<Company>James li</Company>
-		<PackageProjectUrl>https://gitee.com/fengwuyan/auto-web-api</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/MapleWithoutWords/Cike.AutoApi</PackageProjectUrl>
 		<PackageIcon>logo.png</PackageIcon>
-		<RepositoryUrl>https://gitee.com/fengwuyan/auto-web-api</RepositoryUrl>
-		<RepositoryType>gitee</RepositoryType>
+		<RepositoryUrl>https://github.com/MapleWithoutWords/Cike.AutoApi</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 		<NoWarn>$(NoWarn);CS1591</NoWarn>
 
 	</PropertyGroup>
