@@ -1,4 +1,4 @@
-# NET.AutoApi
+# Cike.AutoApi
 
 #### 介绍
 🔥自动api，让你的代码更加简洁🔥。如果你的控制器层只是像以下这种，转发了业务层的代码，那么自动api将非常适合您的项目。自动api会直接根据你业务层的方法，结合restful规范动态生成控制器。
@@ -39,7 +39,7 @@ public class UserController:ControllerBase
 #### 安装教程
 
 ```shell
-dotnet add package NET.AutoApi
+dotnet add package Cike.AutoApi
 ```
 
 #### 使用说明

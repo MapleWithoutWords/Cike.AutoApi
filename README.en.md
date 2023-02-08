@@ -1,4 +1,4 @@
-# AutoWebApi
+# Cike.AutoApi
 
 #### Description
 🔥Automatic api to make your code more concise 🔥. If your controller layer simply relays code from the business layer, like the following, then the automated api is a great fit for your project. The automated api dynamically generates controllers directly based on your business-layer methods, combined with restful specifications.
@@ -39,7 +39,7 @@ public class UserController:ControllerBase
 #### Installation
 
 ```shell
-dotnet add package NET.AutoApi
+dotnet add package Cike.AutoApi
 ```
 
 #### Instructions

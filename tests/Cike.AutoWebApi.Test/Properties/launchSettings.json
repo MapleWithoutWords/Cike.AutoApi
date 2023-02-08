@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "NET.AutoWebApi.Test": {
+    "Cike.AutoWebApi.Test": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
