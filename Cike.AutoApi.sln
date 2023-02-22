@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{971AC614-6BB6-4C46-860C-DCA57F6CCB37}"
 	ProjectSection(SolutionItems) = preProject
 		common.props = common.props
+		README.en.md = README.en.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cike.AutoWebApi.Test", "tests\Cike.AutoWebApi.Test\Cike.AutoWebApi.Test.csproj", "{ED777777-FDD2-406A-B95D-6D3F632C0881}"

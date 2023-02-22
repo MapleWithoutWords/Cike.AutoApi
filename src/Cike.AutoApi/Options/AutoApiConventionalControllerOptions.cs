@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Cike.AutoWebApi.Consts;
 using Cike.AutoWebApi.ModelBinding;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,8 @@ namespace Cike.AutoWebApi.Options
 {
     public class AutoApiConventionalControllerOptions
     {
+        public string DefaultRootPath { get; set; } = "";
+        public string DefaultApiPrefix { get; set; } = "api";
         /// <summary>
         /// 控制器转换配置
         /// </summary>
@@ -60,12 +61,33 @@ namespace Cike.AutoWebApi.Options
         {
             var setting = new AutoApiConventionalControllerSetting(
                 assembly,
-                AutoApiConsts.DefaultRootPath
+                this.DefaultRootPath
             );
 
             optionsAction?.Invoke(setting);
             setting.Initialize();
             ConventionalControllerSettings.Add(setting);
+            return this;
+        }
+        /// <summary>
+        /// 创建一个自动api控制器转换配置
+        /// </summary>
+        /// <param name="assemblies"></param>
+        /// <param name="optionsAction"></param>
+        /// <returns></returns>
+        public AutoApiConventionalControllerOptions CreateConventional(Assembly[] assemblies, Action<AutoApiConventionalControllerSetting> optionsAction = null)
+        {
+            foreach (var assembly in assemblies)
+            {
+                var setting = new AutoApiConventionalControllerSetting(
+                    assembly,
+                    this.DefaultRootPath
+                );
+
+                optionsAction?.Invoke(setting);
+                setting.Initialize();
+                ConventionalControllerSettings.Add(setting);
+            }
             return this;
         }
     }

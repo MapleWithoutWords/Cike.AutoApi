@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Cike.AutoWebApi.Consts;
 using Cike.AutoWebApi.Helper;
 using Cike.AutoWebApi.Options;
 using Cike.AutoWebApi.Setting;
@@ -254,7 +253,7 @@ namespace Cike.AutoWebApi
             RemoveEmptySelectors(controller.Selectors);
 
             var controllerType = controller.ControllerType.AsType();
-            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(controllerType.GetTypeInfo()); 
+            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(controllerType.GetTypeInfo());
             if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabled)
             {
                 return;
@@ -381,7 +380,7 @@ namespace Cike.AutoWebApi
                 return areaAttribute.RouteValue;
             }
 
-            return AutoApiConsts.DefaultRootPath;
+            return Options.DefaultRootPath;
         }
 
 
@@ -452,7 +451,7 @@ namespace Cike.AutoWebApi
         /// <returns></returns>
         protected virtual bool? IsVisibleAutoApiServiceMethod(MethodInfo method)
         {
-            
+
             var attribute = ReflectionHelper.GetSingleAttributeOrDefault<AutoApiAttribute>(method);
             if (attribute == null)
             {

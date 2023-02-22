@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Options;
-using Cike.AutoWebApi.Consts;
 using Cike.AutoWebApi.Helper;
 using Cike.AutoWebApi.Options;
 
@@ -34,10 +33,10 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder
         string httpMethod,
         AutoApiConventionalControllerSetting configuration)
     {
-        var apiRoutePrefix = AutoApiConsts.DefaultApiPrefix;
+        var apiRoutePrefix = Options.DefaultApiPrefix;
         var controllerNameInUrl = controllerName;
 
-        var url = $"{apiRoutePrefix}/{rootPath}/{controllerName.ToKebabCase()}".Replace("//","/");
+        var url = $"{apiRoutePrefix}/{rootPath}/{controllerName.ToKebabCase()}".Replace("//", "/");
 
         var idParameterModel = action.Parameters.FirstOrDefault(p => p.ParameterName == "id");
         if (idParameterModel != null)
