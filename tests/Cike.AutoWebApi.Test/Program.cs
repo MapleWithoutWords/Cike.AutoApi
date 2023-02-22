@@ -16,9 +16,15 @@ builder.Services.AddTransient<TestService>();
 
 builder.Services.AddControllers();
 
+
 builder.Services.AddAutoApiService(opt =>
 {
-    opt.CreateConventional(typeof(CikeServiceTest).Assembly, opt => opt.RootPath = "");
+    opt.DefaultRootPath = "v1";
+    opt.CreateConventional(typeof(CikeServiceTest).Assembly);
+});
+builder.Services.AddAutoApiService(opt =>
+{
+    opt.CreateConventional(typeof(Program).Assembly,opt=>opt.RootPath="");
 });
 
 
@@ -36,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         c.IncludeXmlComments(item, true);
     }
-    c.DocInclusionPredicate((docName,action)=>true);
+    c.DocInclusionPredicate((docName, action) => true);
 });
 
 var app = builder.Build();
