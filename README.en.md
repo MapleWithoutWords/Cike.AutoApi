@@ -1,4 +1,4 @@
-# Cike.AutoApi
+# Abp.AutoApi
 
 #### Description
 🔥Automatic api to make your code more concise 🔥. If your controller layer simply relays code from the business layer, like the following, then the automated api is a great fit for your project. The automated api dynamically generates controllers directly based on your business-layer methods, combined with restful specifications.
@@ -34,12 +34,12 @@ public class UserController:ControllerBase
 
 
 #### Software Architecture
-* This project relies on.net6
+* This project relies on.net7
 
 #### Installation
 
 ```shell
-dotnet add package Cike.AutoApi
+dotnet add package Cike.Abp.AutoApi
 ```
 
 #### Instructions
@@ -55,10 +55,10 @@ builder.Services.AddAutoApiService(opt =>
 });
 ```
 
-2. Business layer code, just need to inherit ```IAutoApiService``` interface
+2. Business layer code, just need to inherit ```IRemoteService``` interface
 
 ```c#
-    public class TestService : IAutoApiService
+    public class TestService : IRemoteService
     {
         public async Task<List<string>> CreateAsync(TestCreateUpdateInput input)
         {
@@ -82,11 +82,11 @@ builder.Services.AddAutoApiService(opt =>
         }
         
         /// <summary>
-        /// Upload file. If you upload files,Please use IAutoApiStreamContent[] .
+        /// Upload file. If you upload files,Please use IRemoteStreamContent[] .
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public async Task<string> ImportAsync(IAutoApiStreamContent file)
+        public async Task<string> ImportAsync(IRemoteStreamContent file)
         {
             using var fileStream = file.GetStream();
 

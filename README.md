@@ -1,4 +1,4 @@
-# Cike.AutoApi
+# Abp.AutoApi
 
 #### 介绍
 🔥自动api，让你的代码更加简洁🔥。如果你的控制器层只是像以下这种，转发了业务层的代码，那么自动api将非常适合您的项目。自动api会直接根据你业务层的方法，结合restful规范动态生成控制器。
@@ -39,7 +39,7 @@ public class UserController:ControllerBase
 #### 安装教程
 
 ```shell
-dotnet add package Cike.AutoApi
+dotnet add package Cike.Abp.AutoApi
 ```
 
 #### 使用说明
@@ -56,10 +56,10 @@ builder.Services.AddAutoApiService(opt =>
 
 ```
 
-2. 业务层代码，只需要继承 ```IAutoApiService``` 接口就行
+2. 业务层代码，只需要继承 ```IRemoteService``` 接口就行
 
 ```c#
-    public class TestService : IAutoApiService
+    public class TestService : IRemoteService
     {
         public async Task<List<string>> CreateAsync(TestCreateUpdateInput input)
         {
@@ -87,7 +87,7 @@ builder.Services.AddAutoApiService(opt =>
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public async Task<string> ImportAsync(IAutoApiStreamContent file)
+        public async Task<string> ImportAsync(IRemoteStreamContent file)
         {
             using var fileStream = file.GetStream();
 

@@ -1,2 +1,2 @@
 dotnet build -c Release
-dotnet pack ./src/Cike.AutoApi/Cike.AutoApi.csproj -c Release -o .\publish\Cike.AutoApi
+dotnet pack ./src/Cike.Abp.AutoApi/Cike.Abp.AutoApi.csproj -c Release -o .\publish\Cike.Abp.AutoApi
